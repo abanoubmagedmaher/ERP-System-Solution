@@ -28,6 +28,7 @@ namespace Core.Specifications
         public Expression<Func<T, object>> OrderByDesc { get; private set; }
 
         #endregion
+
         #region Includes
         protected void AddIncludes(Expression<Func<T,object>> includeExpression)
         {
@@ -43,6 +44,21 @@ namespace Core.Specifications
         protected void AddorderByDesc(Expression<Func<T, object>> orderByExpressionDesc)
         {
             OrderByDesc = orderByExpressionDesc;
+        }
+        #endregion
+
+        #region Pagination
+        public int Take { get;  set; }
+
+        public int Skip { get;  set; }
+
+        public bool IsPagingEnabled { get;  set; }
+
+        public void ApplyPaging(int skip ,int take)
+        {
+            Skip = skip;
+            Take = take;
+            IsPagingEnabled = true;
         }
         #endregion
     }

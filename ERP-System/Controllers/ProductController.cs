@@ -4,6 +4,7 @@ using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using ERP_System.DTOS;
+using ERP_System.Helpers;
 using Infrastrucure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -50,11 +51,15 @@ namespace ERP_System.Controllers
         //}
 
         [HttpGet("GetAllProducts")]
-        public async Task<ActionResult<List<ProductToReturnDTO>>> GetAllProducts(string sort,int? brandId,int? typeId)
+        public async Task<ActionResult<Pagination<ProductToReturnDTO>>> GetAllProducts([FromQuery]ProductSpecParams ProductParams)
         {
-            var spec = new ProductWithTypeAndBrandSpec(sort,brandId,typeId);
+            var spec = new ProductWithTypeAndBrandSpec(ProductParams);
+            var CountSpec = new ProductWithFillterWithCountSpec(ProductParams);
+            var TotalItems = await _productRepo.CountAsync(CountSpec);
             var products = await _productRepo.ListAllAsyncSpec(spec);
-            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDTO>>(products));
+            var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDTO>>(products);
+            var Page = new Pagination<ProductToReturnDTO>(ProductParams.PageIndex,ProductParams.PageSize, TotalItems,data);
+            return Ok(Page);
         }
 
         [HttpGet("{id}")]
