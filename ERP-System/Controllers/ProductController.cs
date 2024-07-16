@@ -42,10 +42,18 @@ namespace ERP_System.Controllers
         public async Task<ActionResult<List<ProductToReturnDTO>>> GetProducts()
         {
             var spec = new ProductToReturnDTO();
-            var products = await _productRepo.ListAllAsync();   
-            var map = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList< ProductToReturnDTO> >(products);
+            var products = await _productRepo.ListAllAsync();
+            var map = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDTO>>(products);
             return Ok(map);
 
+        }
+
+        [HttpGet("GetAllProducts")]
+        public async Task<ActionResult<List<ProductToReturnDTO>>> GetAllProducts(string sort)
+        {
+            var spec = new ProductWithTypeAndBrandSpec(sort);
+            var products = await _productRepo.ListAllAsyncSpec(spec);
+            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDTO>>(products));
         }
 
         [HttpGet("{id}")]

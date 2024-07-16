@@ -22,10 +22,27 @@ namespace Core.Specifications
         public List<Expression<Func<T, object>>> Includes
                 { get; }= new List<Expression<Func<T, object>>>();
 
+        #region Sortting
+        public Expression<Func<T, object>> OrderBy { get; private set; }
+
+        public Expression<Func<T, object>> OrderByDesc { get; private set; }
+
+        #endregion
         #region Includes
         protected void AddIncludes(Expression<Func<T,object>> includeExpression)
         {
             Includes.Add(includeExpression);
+        }
+        #endregion
+
+        #region Sortting Function
+        protected void AddOrderBy(Expression<Func<T, object>> orderByExpretion)
+        {
+            OrderBy = orderByExpretion;
+        }
+        protected void AddorderByDesc(Expression<Func<T, object>> orderByExpressionDesc)
+        {
+            OrderByDesc = orderByExpressionDesc;
         }
         #endregion
     }
