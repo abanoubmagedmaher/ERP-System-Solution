@@ -31,7 +31,6 @@ namespace Core.Specifications
                 }
             }
         }
-
         public ProductWithTypeAndBrandSpec(int id):base(x=>x.Id==id)
         {
             AddIncludes(x => x.ProductType);
