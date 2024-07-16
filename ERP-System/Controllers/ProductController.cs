@@ -38,20 +38,21 @@ namespace ERP_System.Controllers
             _mapper = mapper;
         }
         #region Product
-        [HttpGet]
-        public async Task<ActionResult<List<ProductToReturnDTO>>> GetProducts()
-        {
-            var spec = new ProductToReturnDTO();
-            var products = await _productRepo.ListAllAsync();
-            var map = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDTO>>(products);
-            return Ok(map);
 
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<List<ProductToReturnDTO>>> GetProducts()
+        //{
+        //    var spec = new ProductToReturnDTO();
+        //    var products = await _productRepo.ListAllAsync();
+        //    var map = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDTO>>(products);
+        //    return Ok(map);
+
+        //}
 
         [HttpGet("GetAllProducts")]
-        public async Task<ActionResult<List<ProductToReturnDTO>>> GetAllProducts(string sort)
+        public async Task<ActionResult<List<ProductToReturnDTO>>> GetAllProducts(string sort,int? brandId,int? typeId)
         {
-            var spec = new ProductWithTypeAndBrandSpec(sort);
+            var spec = new ProductWithTypeAndBrandSpec(sort,brandId,typeId);
             var products = await _productRepo.ListAllAsyncSpec(spec);
             return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDTO>>(products));
         }
