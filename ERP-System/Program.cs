@@ -33,6 +33,18 @@ namespace ERP_System
             #region Add AutoMapper
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             #endregion
+
+            #region CROSS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowAnyOrigin();
+                });
+            });
+            #endregion
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -50,6 +62,9 @@ namespace ERP_System
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            #region Allow Cros Step2
+            app.UseCors("CorsPolicy");
+            #endregion
             app.UseAuthorization();
 
 
